@@ -174,3 +174,26 @@ if __name__ == "__main__":
             writer = csv.writer(csvfile)
             for item in localUrls:
                 writer.writerow([item])
+
+import os
+
+# Define paths to train and test directories
+output_directory = '/output_directory/'
+train_dir = os.path.join(output_directory, 'train')
+test_dir = os.path.join(output_directory, 'test')
+
+# Function to count images in a directory
+def count_images_in_folder(folder_path):
+    count = 0
+    for filename in os.listdir(folder_path):
+        img_path = os.path.join(folder_path, filename)
+        if os.path.isfile(img_path):
+            count += 1
+    return count
+
+# Count images in train and test directories
+num_train_images = count_images_in_folder(train_dir)
+num_test_images = count_images_in_folder(test_dir)
+
+print(f"Number of training images: {num_train_images}")
+print(f"Number of test images: {num_test_images}")
