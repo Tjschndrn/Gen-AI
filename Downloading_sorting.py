@@ -2,6 +2,8 @@
 """
 Script for downloading SDSS galaxy image cutouts in parallel using multi-threading.
 """
+
+
 import os
 import logging
 import concurrent.futures
@@ -31,6 +33,7 @@ def chunks(lst, n):
     """
     Yield successive n-sized chunks from lst.
     """
+    lst = list(lst)
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
@@ -70,8 +73,8 @@ def multiobject_download(url_list, download_directory, log, filenames, timeout=1
     Download multiple images concurrently and return the local paths of downloaded images.
     """
     global global_timeout
-    global log
-    log = log
+    #global log
+    #log = log   
     global_timeout = float(timeout)
 
     tasks = [[url, os.path.join(download_directory, filename)] for url, filename in zip(url_list, filenames)]
@@ -85,7 +88,7 @@ def multiobject_download(url_list, download_directory, log, filenames, timeout=1
 
 # Define your paths here
 if __name__ == "__main__":
-    csv_path = "rings_gt_90.csv"
+    csv_path = r"C:\Users\LENOVO\Downloads\rings_gt_90.csv"
     output_dir = "output_directory"
     download_list = os.path.join(output_dir, "downloaded.csv")
     url_notfound = os.path.join(output_dir, "urlnotfound.csv")
@@ -102,7 +105,7 @@ if __name__ == "__main__":
     data = pd.read_csv(csv_path)
     racol = "ra"
     deccol = "dec"
-    objidcol = "SDSS_Objid"
+    objidcol = "objid"
 
     retrieved_ids = []
 
@@ -155,18 +158,48 @@ if __name__ == "__main__":
             for item in local_urls:
                 writer.writerow([item])
 
-import os
+import shutil
 
-# Define your own paths to train and test directories here
-output_directory = '/output_directory/'
-train_dir = os.path.join(output_directory, 'train')
-test_dir = os.path.join(output_directory, 'test')
+def redistribute_images(download_dir, train_dir, test_dir, train_ratio=0.7):
+    """
+    Move images from the download directory to train and test directories based on the specified ratio.
+    """
+    images = [f for f in os.listdir(download_dir) if os.path.isfile(os.path.join(download_dir, f))]
+    total_images = len(images)
+    train_count = int(total_images * train_ratio)
+    
+    # Shuffle images to ensure random distribution
+    random.shuffle(images)
+    
+    train_images = images[:train_count]
+    test_images = images[train_count:]
+    
+    for img in train_images:
+        shutil.move(os.path.join(download_dir, img), os.path.join(train_dir, img))
+    
+    for img in test_images:
+        shutil.move(os.path.join(download_dir, img), os.path.join(test_dir, img))
 
+# Define paths to train and test directories
+train_dir = os.path.join(output_dir, 'train')
+test_dir = os.path.join(output_dir, 'test')
+
+if not os.path.exists(train_dir):
+    os.makedirs(train_dir)
+if not os.path.exists(test_dir):
+    os.makedirs(test_dir)
+
+# Redistribute images
+redistribute_images(download_dir, train_dir, test_dir, train_ratio=3398/4855)
+
+# Function to count images in a directory
 def count_images_in_folder(folder_path):
-    """
-    Count the number of images in a directory.
-    """
-    return sum([1 for filename in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, filename))])
+    count = 0
+    for filename in os.listdir(folder_path):
+        img_path = os.path.join(folder_path, filename)
+        if os.path.isfile(img_path):
+            count += 1
+    return count
 
 # Count images in train and test directories
 num_train_images = count_images_in_folder(train_dir)
@@ -174,3 +207,4 @@ num_test_images = count_images_in_folder(test_dir)
 
 print(f"Number of training images: {num_train_images}")
 print(f"Number of test images: {num_test_images}")
+
