@@ -1,3 +1,4 @@
+#Used on google colab for the additional GPU
 import os
 import shutil
 import pandas as pd
