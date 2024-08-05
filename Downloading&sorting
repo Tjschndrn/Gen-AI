@@ -83,7 +83,7 @@ def multiobject_download(url_list, download_directory, log, filenames, timeout=1
 
     return downloaded_paths
 
-# Define your own paths here
+# Define your paths here
 if __name__ == "__main__":
     csv_path = "rings_gt_90.csv"
     output_dir = "output_directory"
