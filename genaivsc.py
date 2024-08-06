@@ -11,18 +11,6 @@ import urllib
 import csv
 import sys
 import numpy as np
-#from google.colab import files
-#uploaded = files.upload()
-#Choose and upload the zip files
-#import zipfile
-#zip_file_test = 'test.zip'
-#zip_file_train = 'train.zip'
-#with zipfile.ZipFile(zip_file_test, 'r') as zip_ref:
- #   zip_ref.extractall('/content/test')
-#with zipfile.ZipFile(zip_file_train, 'r') as zip_ref:
- #   zip_ref.extractall('/content/train')
-#print("Files in test directory:", os.listdir('/content/test'))
-#print("Files in train directory:", os.listdir('/content/train'))
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tqdm import tqdm
 
@@ -183,19 +171,7 @@ def train(dataset, epochs):
             epoch_time = time.time() - start
             print(f'Epoch {epoch + 1}, Gen Loss: {gen_loss}, Disc Loss: {disc_loss}, Time: {epoch_time:.2f} sec')
             writer.writerow([epoch + 1, gen_loss.numpy(), disc_loss.numpy(), epoch_time])
-#def train(dataset, epochs):
- #   for epoch in range(epochs):
-  #      start = time.time()
 
-   #     for image_batch in dataset:
-    #        gen_loss, disc_loss = train_step(image_batch)
-
-        # Produce images for the GIF as we go
-     #   generate_and_save_images(generator, epoch + 1, seed)
-
-      #  print(f'Epoch {epoch + 1}, Gen Loss: {gen_loss}, Disc Loss: {disc_loss}')
-
-       # print(f'Time for epoch {epoch + 1} is {time.time() - start:.2f} sec')
 
     # Generate after the final epoch
     generate_and_save_images(generator, epochs, seed)
