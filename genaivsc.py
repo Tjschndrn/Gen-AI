@@ -166,20 +166,36 @@ NUM_EXAMPLES_TO_GENERATE = 16
 
 # Seed to visualize progress
 seed = tf.random.normal([NUM_EXAMPLES_TO_GENERATE, NOISE_DIM])
-
 def train(dataset, epochs):
-    for epoch in range(epochs):
-        start = time.time()
+    with open('training_metrics.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Epoch", "Gen Loss", "Disc Loss", "Time (s)"])
 
-        for image_batch in dataset:
-            gen_loss, disc_loss = train_step(image_batch)
+        for epoch in range(epochs):
+            start = time.time()
+
+            for image_batch in dataset:
+                gen_loss, disc_loss = train_step(image_batch)
+
+            # Produce images for the GIF as we go
+            generate_and_save_images(generator, epoch + 1, seed)
+
+            epoch_time = time.time() - start
+            print(f'Epoch {epoch + 1}, Gen Loss: {gen_loss}, Disc Loss: {disc_loss}, Time: {epoch_time:.2f} sec')
+            writer.writerow([epoch + 1, gen_loss.numpy(), disc_loss.numpy(), epoch_time])
+#def train(dataset, epochs):
+ #   for epoch in range(epochs):
+  #      start = time.time()
+
+   #     for image_batch in dataset:
+    #        gen_loss, disc_loss = train_step(image_batch)
 
         # Produce images for the GIF as we go
-        generate_and_save_images(generator, epoch + 1, seed)
+     #   generate_and_save_images(generator, epoch + 1, seed)
 
-        print(f'Epoch {epoch + 1}, Gen Loss: {gen_loss}, Disc Loss: {disc_loss}')
+      #  print(f'Epoch {epoch + 1}, Gen Loss: {gen_loss}, Disc Loss: {disc_loss}')
 
-        print(f'Time for epoch {epoch + 1} is {time.time() - start:.2f} sec')
+       # print(f'Time for epoch {epoch + 1} is {time.time() - start:.2f} sec')
 
     # Generate after the final epoch
     generate_and_save_images(generator, epochs, seed)
@@ -195,7 +211,7 @@ def generate_and_save_images(model, epoch, test_input):
         plt.axis('off')
 
     plt.savefig(f'image_at_epoch_{epoch:04d}.png')
-    plt.show()
+    plt.close(fig)
 
 BUFFER_SIZE = 60000
 BATCH_SIZE = 32
