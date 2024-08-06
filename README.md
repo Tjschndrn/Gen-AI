@@ -42,7 +42,7 @@ python Downloading_sorting.py
 Note: Update the csv_path variable in the script to point to your catalog file.
 
 ### 2. Training GAN Locally
-To train GANs locally using VS Code, run:
+To train GANs locally, run:
 
 bash
 
