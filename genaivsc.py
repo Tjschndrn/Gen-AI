@@ -159,7 +159,7 @@ def train_step(images):
 
 import time
 
-EPOCHS = 50
+EPOCHS = 200
 BATCH_SIZE = 32
 NOISE_DIM = 100
 NUM_EXAMPLES_TO_GENERATE = 16
