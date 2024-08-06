@@ -1,6 +1,6 @@
-# Training GANs Locally with VS Code
+# Training GANs Locally
 
-This script trains GANs using a local machine and VS Code. It handles image loading, model training, and saving generated images.
+This script trains GANs using a local machine. It handles image loading, model training, and saving generated images.
 
 ## Features
 - Load and preprocess images from local directories.
