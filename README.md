@@ -10,7 +10,8 @@ This project aims to generate synthetic galaxy images using Generative Adversari
 
 ## Scripts Overview
 
-- **`Downloading_sorting.py`**: Downloads galaxy image cutouts from SDSS and sorts them into training and testing sets.
+- **`Downloading_SDSS.py`**: Downloads galaxy image cutouts from SDSS.
+- **`Redistributing_images.py`**: Redistributing the images into train and test.
 - **`genaivsc.py`**: Trains GANs locally with the provided dataset.
 
 ## Installation
@@ -32,16 +33,23 @@ This project aims to generate synthetic galaxy images using Generative Adversari
 
 ## Usage
 
-### 1. Downloading and Sorting Images
+### 1. Downloading Images
 
-To download and sort SDSS galaxy images, run:
+To download SDSS galaxy images, run:
 bash
 
-python Downloading_sorting.py
+python Downloading_SDSS.py
 
 Note: Update the csv_path variable in the script to point to your catalog file.
 
-### 2. Training GAN Locally
+### 2. Redistributing Images
+
+To redistribute images into train and test, run:
+bash
+
+python Redistributing_images.py
+
+### 3. Training GAN Locally
 To train GANs locally, run:
 
 bash
